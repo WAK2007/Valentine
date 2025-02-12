@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Valentine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #ff4b6c;
+            font-size: 2rem;
+        }
+
+        .islands-container {
+            margin-top: 100px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+        }
+
+        .island {
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .island:hover {
+            transform: translateY(-10px);
+        }
+
+        .island::before {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.7);
+            bottom: -20px;
+            border-radius: 50%;
+            filter: blur(10px);
+        }
+
+        .island h2 {
+            color: #ff4b6c;
+            margin-bottom: 1rem;
+        }
+
+        .island p {
+            color: #666;
+            text-align: center;
+            padding: 0 2rem;
+        }
+
+        .island-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .island {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
+        /* Floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .island {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .island:nth-child(2) {
+            animation-delay: 2s;
+        }
+
+        .island:nth-child(3) {
+            animation-delay: 4s;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Our Love Journey ❤️</h1>
+    </header>
+
+    <div class="islands-container">
+        <div class="island" onclick="window.location.href='memories.html'">
+            <div class="island-icon">📸</div>
+            <h2>Our Memories</h2>
+            <p>Click to explore our beautiful moments together</p>
+        </div>
+
+        <div class="island" onclick="window.location.href='garden.html'">
+            <div class="island-icon">🌸</div>
+            <h2>Love Garden</h2>
+            <p>Create and grow our garden of love</p>
+        </div>
+
+        <div class="island" onclick="window.location.href='surprise.html'">
+            <div class="island-icon">✨</div>
+            <h2>Special Surprise</h2>
+            <p>A magical surprise awaits you</p>
+        </div>
+    </div>
+</body>
+</html>

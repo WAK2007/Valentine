@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Garden</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 0.5rem 1rem;
+            background: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .garden-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .love-item {
+            position: absolute;
+            font-size: 2rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.3s;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .letter-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 80%;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 2000;
+        }
+
+        .letter-container.show {
+            display: block;
+        }
+
+        .close-letter {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            border: none;
+            background: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="window.location.href='main.html'">← Back</button>
+    <div class="counter">Pops: <span id="popCount">0</span>/25</div>
+    <div class="garden-container" id="garden"></div>
+    <div class="controls">
+        <button class="control-btn" onclick="addItem('🌸')">🌸</button>
+        <button class="control-btn" onclick="addItem('❤️')">❤️</button>
+        <button class="control-btn" onclick="addItem('⭐')">⭐</button>
+    </div>
+    <audio id="popSound" preload="auto">
+        <source src="pop.mp3" type="audio/mpeg">
+    </audio>
+    
+    <div class="letter-container" id="letterContainer">
+        <button class="close-letter" onclick="closeLetter()">×</button>
+        <h2>My Dearest Love ❤️</h2>
+        <div id="letterContent"></div>
+    </div>
+
+    <script>
+        let popCount = 0;
+        const garden = document.getElementById('garden');
+        const letterText = `
+            My dear Nar, I love you so meowch! ❤️ I hope you enjoyed this little surprise of mine 🌸, You mean whole world to me. The time i met you 
+            I understood what love is. You are my love, my life, my everything. I love you so much. I hope we will have wonderful life together.
+            With 25 kids and 25 cats. I love you so much. I hope you will always be happy. I love you so much. I am glad i met you I am glad I am your
+            and will be yours forever. We will live together, get old together and die together.
+            I hope you liked my gift :3 i spent little time on it but i hope you will like it. I love you so much.I love you so much.I love you so much.I love you so much.I love you so much.I love you so much.
+            <3<3<3<3<3<3<3<3❤️❤️❤️❤️❤️❤️❤️❤️❤️💜 💜 💜 💜 💜 💜 💜 💜 💜 💜 
+        `
+
+        function addItem(emoji) {
+            if (popCount >= 25) return;
+            
+            const item = document.createElement('div');
+            item.className = 'love-item';
+            item.innerHTML = emoji;
+            
+            const x = Math.random() * (window.innerWidth - 50);
+            const y = Math.random() * (window.innerHeight - 50);
+            
+            item.style.left = x + 'px';
+            item.style.top = y + 'px';
+            
+            item.addEventListener('click', () => explodeItem(item));
+            garden.appendChild(item);
+        }
+
+        function explodeItem(item) {
+    // Play the pop sound
+    popSound.currentTime = 0;  // Reset sound so it can play again
+    popSound.play();
+
+    item.style.animation = 'explode 0.5s forwards';
+    setTimeout(() => {
+        item.remove();
+        popCount++;
+        document.getElementById('popCount').textContent = popCount;
+
+        if (popCount === 25) {
+            showLetter();
+        }
+    }, 500);
+}
+
+
+        function showLetter() {
+            const letterContainer = document.getElementById('letterContainer');
+            const letterContent = document.getElementById('letterContent');
+            letterContainer.classList.add('show');
+            
+            let index = 0;
+            function typeLetter() {
+                if (index < letterText.length) {
+                    letterContent.textContent += letterText.charAt(index);
+                    index++;
+                    setTimeout(typeLetter, 50);
+                }
+            }
+            typeLetter();
+        }
+
+        function closeLetter() {
+            document.getElementById('letterContainer').classList.remove('show');
+        }
+        
+    </script>
+</body>
+</html
